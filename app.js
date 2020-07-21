@@ -8,6 +8,7 @@ let equipment = require("./equipment");
 const app = express();
 
 app.use(cors());
+
 app.use(bodyParser.json());
 
 app.get("/equipment", (req, res) => {
@@ -20,6 +21,18 @@ app.post("/equipment", (req, res) => {
   const newEquipment = { id, slug, ...req.body };
   equipment.push(newEquipment);
   res.status(201).json(newEquipment);
+});
+
+app.put("/equipment/:equipmentId", (req, res) => {
+  const { equipmentId } = req.params;
+  const foundEquipment = equipment.find(
+    (equipment) => equipment.id === +equipmentId
+  );
+
+  if (foundEquipment) {
+    for (const key in req.body) foundEquipment[key] = req.body[key];
+    res.status(204).end();
+  } else res.status(404).json({ message: "Equipment Not Found" });
 });
 
 app.delete("/equipment/:equipmentId", async (req, res) => {
