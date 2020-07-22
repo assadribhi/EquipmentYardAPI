@@ -1,54 +1,29 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const slugify = require("slugify");
 
-let equipment = require("./equipment");
+const db = require("./db/db");
+
+const equipmentRouters = require("./routes/equipment");
 
 const app = express();
 
 app.use(cors());
-
 app.use(bodyParser.json());
 
-app.get("/equipment", (req, res) => {
-  res.json(equipment);
-});
+app.use("/equipment", equipmentRouters);
 
-app.post("/equipment", (req, res) => {
-  const id = equipment[equipment.length - 1].id + 1;
-  const slug = slugify(req.body.name, { lower: true });
-  const newEquipment = { id, slug, ...req.body };
-  equipment.push(newEquipment);
-  res.status(201).json(newEquipment);
-});
-
-app.put("/equipment/:equipmentId", (req, res) => {
-  const { equipmentId } = req.params;
-  const foundEquipment = equipment.find(
-    (equipment) => equipment.id === +equipmentId
-  );
-
-  if (foundEquipment) {
-    for (const key in req.body) foundEquipment[key] = req.body[key];
-    res.status(204).end();
-  } else res.status(404).json({ message: "Equipment Not Found" });
-});
-
-app.delete("/equipment/:equipmentId", async (req, res) => {
-  const { equipmentId } = req.params;
-  const foundEquipment = equipment.find(
-    (equipment) => equipment.id === +equipmentId
-  );
-
-  if (foundEquipment) {
-    equipment = equipment.filter((equipment) => equipment !== foundEquipment);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "Equipment Not Found" });
+const run = async () => {
+  try {
+    await db.authenticate();
+    console.log("Connection to the database successful!");
+  } catch (error) {
+    console.error("Error connecting to the database: ", error);
   }
-});
 
-app.listen(8000, () => {
-  console.log("This Works!!!!!");
-});
+  await app.listen(8000, () => {
+    console.log("This Works!!!!!");
+  });
+};
+
+run();
