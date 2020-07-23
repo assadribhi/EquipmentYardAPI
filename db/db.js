@@ -6,5 +6,6 @@ const db = new Sequelize({
   database: "equipmentYard_db",
   dialect: "postgres",
   host: "localhost",
+  logging: false,
 });
 module.exports = db;

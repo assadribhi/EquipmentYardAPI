@@ -1,33 +1,52 @@
+const { Equipment } = require("../db/models");
 const slugify = require("slugify");
 
 let equipment = require("../equipment");
 
-exports.equipmentCreate = (req, res) => {
-  const id = equipment[equipment.length - 1].id + 1;
-  const slug = slugify(req.body.name, { lower: true });
-  const newEquipment = { id, slug, ...req.body };
-  equipment.push(newEquipment);
-  res.status(201).json(newEquipment);
+exports.equipmentCreate = async (req, res) => {
+  try {
+    const newEquipment = await Equipment.create(req.body);
+    res.status(201).json(newEquipment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.equipmentList = (req, res) => {
-  res.json(equipment);
+exports.equipmentList = async (req, res) => {
+  try {
+    const equipment = await Equipment.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.json(equipment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.equipmentUpdate = (req, res) => {
+exports.equipmentUpdate = async (req, res) => {
   const { equipmentId } = req.params;
-  const foundEquipment = equipment.find(
-    (equipment) => equipment.id === +equipmentId
-  );
-
-  if (foundEquipment) {
-    for (const key in req.body) foundEquipment[key] = req.body[key];
-    res.status(204).end();
-  } else res.status(404).json({ message: "Equipment Not Found" });
+  try {
+    const foundEquipment = await Equipment.findByPk(equipmentId);
+    if (foundEquipment) {
+      await foundEquipment.update(req.body);
+      res.status(204).end();
+    } else res.status(404).json({ message: "Equipment Not Found" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.equipmentDelete = (req, res) => {
+exports.equipmentDelete = async (req, res) => {
   const { equipmentId } = req.params;
+  try {
+    const foundEquipment = await Equipment.findByPk(equipmentId);
+    if (foundEquipment) {
+      await foundEquipment.destroy();
+      res.status(204).end();
+    } else res.status(404).json({ message: "Equipment Not Found" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
   const foundEquipment = equipment.find(
     (equipment) => equipment.id === +equipmentId
   );

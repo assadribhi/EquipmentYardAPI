@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-const db = require("./db/db");
+const db = require("./db");
 
 const equipmentRouters = require("./routes/equipment");
+const { Equipment } = require("./db/models");
 
 const app = express();
 
@@ -15,8 +16,8 @@ app.use("/equipment", equipmentRouters);
 
 const run = async () => {
   try {
-    await db.authenticate();
-    console.log("Connection to the database successful!");
+    await db.sync();
+    console.log("Connection to DB Successful");
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
