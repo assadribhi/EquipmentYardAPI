@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 
 const db = require("./db");
 
-const equipmentRouters = require("./routes/equipment");
+const equipmentRoutes = require("./routes/equipment");
+const yardRoutes = require("./routes/yards");
 const { Equipment } = require("./db/models");
 
 const path = require("path");
@@ -14,7 +15,8 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use("/equipment", equipmentRouters);
+app.use("/equipment", equipmentRoutes);
+app.use("/yards", yardRoutes);
 app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use((req, res, next) => {
@@ -28,7 +30,7 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync();
+    await db.sync({ alter: true });
     console.log("Connection to DB Successful");
   } catch (error) {
     console.error("Error connecting to the database: ", error);

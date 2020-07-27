@@ -1,4 +1,4 @@
-const { Equipment } = require("../db/models");
+const { Equipment, Yard } = require("../db/models");
 const slugify = require("slugify");
 
 exports.fetchEquipment = async (equipmentId, next) => {
@@ -10,24 +10,11 @@ exports.fetchEquipment = async (equipmentId, next) => {
   }
 };
 
-exports.equipmentCreate = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
-    }
-    const newEquipment = await Equipment.create(req.body);
-    res.status(201).json(newEquipment);
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.equipmentList = async (req, res, next) => {
   try {
     const equipment = await Equipment.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["yardId", "createdAt", "updatedAt"] },
+      include: { as: "yard", model: Yard, attributes: ["name"] },
     });
     res.json(equipment);
   } catch (error) {

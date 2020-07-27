@@ -1,7 +1,6 @@
 const express = require("express");
 
 const {
-  equipmentCreate,
   equipmentList,
   equipmentUpdate,
   equipmentDelete,
@@ -25,9 +24,7 @@ router.param("equipmentId", async (req, res, next, equipmentId) => {
   next();
 });
 
-router.get("/", equipmentList);
-
-router.post("/", upload.single("image"), equipmentCreate);
+router.get("/yards/:yardId/equipment", equipmentList);
 
 router.put("/:equipmentId", upload.single("image"), equipmentUpdate);
 

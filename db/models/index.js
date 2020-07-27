@@ -1,3 +1,11 @@
 const Equipment = require("./Equipment");
+const Yard = require("./Yard");
 
-module.exports = { Equipment };
+Yard.hasMany(Equipment, {
+  as: "equipment",
+  foreignKey: { allowNull: false, fieldName: "yardId" },
+});
+
+Equipment.belongsTo(Yard);
+
+module.exports = { Equipment, Yard };
