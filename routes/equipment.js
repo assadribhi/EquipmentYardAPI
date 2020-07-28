@@ -24,7 +24,7 @@ router.param("equipmentId", async (req, res, next, equipmentId) => {
   next();
 });
 
-router.get("/yards/:yardId/equipment", equipmentList);
+router.get("/", equipmentList);
 
 router.put("/:equipmentId", upload.single("image"), equipmentUpdate);
 

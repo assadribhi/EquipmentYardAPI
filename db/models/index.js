@@ -3,9 +3,10 @@ const Yard = require("./Yard");
 
 Yard.hasMany(Equipment, {
   as: "equipment",
-  foreignKey: { allowNull: false, fieldName: "yardId" },
+  foreignKey: "yardId",
+  allowNull: false,
 });
 
-Equipment.belongsTo(Yard);
+Equipment.belongsTo(Yard, { as: "yard", foreignKey: "yardId" });
 
 module.exports = { Equipment, Yard };
