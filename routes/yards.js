@@ -9,7 +9,7 @@ const {
   equipmentCreate,
 } = require("../controllers/yardControllers");
 
-const upload = require("../middleWare/multer");
+const upload = require("../middleware/multer");
 
 const router = express.Router();
 
@@ -18,12 +18,12 @@ router.param("yardId", async (req, res, next, yardId) => {
 
   if (yard) {
     req.yard = yard;
+    next();
   } else {
     const err = new Error("Yard Not Found");
     err.status = 404;
     next(err);
   }
-  next();
 });
 
 router.get("/", yardList);

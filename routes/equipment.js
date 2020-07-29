@@ -7,7 +7,7 @@ const {
   fetchEquipment,
 } = require("../controllers/equipmentControllers");
 
-const upload = require("../middleWare/multer");
+const upload = require("../middleware/multer");
 
 const router = express.Router();
 
@@ -16,12 +16,12 @@ router.param("equipmentId", async (req, res, next, equipmentId) => {
 
   if (equipment) {
     req.equipment = equipment;
+    next();
   } else {
     const err = new Error("Equipment Not Found");
     err.status = 404;
     next(err);
   }
-  next();
 });
 
 router.get("/", equipmentList);
