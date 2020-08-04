@@ -32,7 +32,7 @@ exports.yardList = async (req, res, next) => {
         {
           model: Equipment,
           as: "equipment",
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: ["id"],
         },
       ],
     });
