@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const db = require("./db");
 
 const equipmentRoutes = require("./routes/equipment");
+const userRoutes = require("./routes/users");
 const yardRoutes = require("./routes/yards");
 const { Equipment } = require("./db/models");
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/equipment", equipmentRoutes);
+app.use(userRoutes);
 app.use("/yards", yardRoutes);
 app.use("/media", express.static(path.join(__dirname, "media")));
 

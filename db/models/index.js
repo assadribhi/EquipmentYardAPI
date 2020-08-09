@@ -1,4 +1,5 @@
 const Equipment = require("./Equipment");
+const User = require("./User");
 const Yard = require("./Yard");
 
 Yard.hasMany(Equipment, {
@@ -9,4 +10,4 @@ Yard.hasMany(Equipment, {
 
 Equipment.belongsTo(Yard, { as: "yard", foreignKey: "yardId" });
 
-module.exports = { Equipment, Yard };
+module.exports = { Equipment, User, Yard };
