@@ -34,7 +34,7 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync({ force: true });
+    await db.sync({ alter: true });
     console.log("Connection to DB Successful");
   } catch (error) {
     console.error("Error connecting to the database: ", error);
