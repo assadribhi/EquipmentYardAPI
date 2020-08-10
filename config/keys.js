@@ -1,0 +1,4 @@
+module.exports = {
+  JWT_SECRET: "112233445566",
+  JWT_EXPIRATION_MS: 900000,
+};
