@@ -1,4 +1,4 @@
-const { Yard, Equipment } = require("../db/models");
+const { Yard, Equipment, User } = require("../db/models");
 const slugify = require("slugify");
 
 exports.fetchYards = async (yardId, next) => {
@@ -33,6 +33,11 @@ exports.yardList = async (req, res, next) => {
           model: Equipment,
           as: "equipment",
           attributes: ["id"],
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: ["username"],
         },
       ],
     });

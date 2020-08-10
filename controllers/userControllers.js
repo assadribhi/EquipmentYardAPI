@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../db/models");
 
+exports.signIn = (req, res) => {};
+
 exports.signup = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;

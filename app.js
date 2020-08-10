@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
+const passport = require("passport");
 const db = require("./db");
+const { localStrategy } = require("./middleware/passport");
 
 const equipmentRoutes = require("./routes/equipment");
 const userRoutes = require("./routes/users");
@@ -15,6 +16,8 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(passport.initialize());
+passport.user(localStrategy);
 
 app.use("/equipment", equipmentRoutes);
 app.use(userRoutes);
