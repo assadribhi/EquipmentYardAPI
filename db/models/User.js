@@ -11,6 +11,7 @@ User.init(
       unique: { args: true, msg: "Username already exists" },
     },
     password: { type: DataTypes.STRING, allowNull: false },
+    role: { type: DataTypes.STRING, defaultValue: "customer" },
   },
   { sequelize: db }
 );
