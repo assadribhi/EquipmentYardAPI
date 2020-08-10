@@ -8,7 +8,6 @@ const { localStrategy } = require("./middleware/passport");
 const equipmentRoutes = require("./routes/equipment");
 const userRoutes = require("./routes/users");
 const yardRoutes = require("./routes/yards");
-const { Equipment } = require("./db/models");
 
 const path = require("path");
 
@@ -17,7 +16,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
-passport.user(localStrategy);
+passport.use(localStrategy);
 
 app.use("/equipment", equipmentRoutes);
 app.use(userRoutes);
@@ -35,7 +34,7 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync({ alter: true });
+    await db.sync({ force: true });
     console.log("Connection to DB Successful");
   } catch (error) {
     console.error("Error connecting to the database: ", error);
