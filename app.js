@@ -3,7 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const db = require("./db");
-const { localStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 
 const equipmentRoutes = require("./routes/equipment");
 const userRoutes = require("./routes/users");
@@ -17,6 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use("/equipment", equipmentRoutes);
 app.use(userRoutes);

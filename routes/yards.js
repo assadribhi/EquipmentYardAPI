@@ -10,6 +10,7 @@ const {
 } = require("../controllers/yardControllers");
 
 const upload = require("../middleware/multer");
+const passport = require("passport");
 
 const router = express.Router();
 
@@ -28,12 +29,32 @@ router.param("yardId", async (req, res, next, yardId) => {
 
 router.get("/", yardList);
 
-router.post("/", upload.single("yardImage"), yardCreate);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("yardImage"),
+  yardCreate
+);
 
-router.put("/:yardId", upload.single("yardImage"), yardUpdate);
+router.put(
+  "/:yardId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("yardImage"),
+  yardUpdate
+);
 
-router.delete("/:yardId", upload.single("yardImage"), yardDelete);
+router.delete(
+  "/:yardId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("yardImage"),
+  yardDelete
+);
 
-router.post("/:yardId/equipment", upload.single("image"), equipmentCreate);
+router.post(
+  "/:yardId/equipment",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  equipmentCreate
+);
 
 module.exports = router;
