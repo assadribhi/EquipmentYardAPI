@@ -10,6 +10,8 @@ Yard.hasMany(Equipment, {
 
 Equipment.belongsTo(Yard, { as: "yard", foreignKey: "yardId" });
 
-Yard.belongsTo(User, { as: "user", foreignKey: "username" });
+User.hasOne(Yard, { foreignKey: "userId" });
+
+Yard.belongsTo(User, { as: "user", foreignKey: "userId" });
 
 module.exports = { Equipment, User, Yard };

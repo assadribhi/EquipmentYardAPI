@@ -12,11 +12,18 @@ exports.fetchYards = async (yardId, next) => {
 
 exports.yardCreate = async (req, res, next) => {
   try {
-    if (req.file) {
+    const foundYard = await Yard.findOne({ where: { userId: req.user.id } });
+    if (foundYard) {
+      if (req.file) {
+        const err = new Error("You already have Yard");
+        err.status = 403;
+        next(err);
+      }
       req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
         req.file.filename
       }`;
     }
+    req.body.userId = req.user.id;
     const newYard = await Yard.create(req.body);
     res.status(201).json(newYard);
   } catch (error) {
@@ -49,13 +56,19 @@ exports.yardList = async (req, res, next) => {
 
 exports.yardUpdate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.role === "admin" || req.user.id === req.yard.userId) {
+      if (req.file) {
+        req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      await req.yard.update(req.body);
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 401;
+      next(err);
     }
-    await req.yard.update(req.body);
-    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -63,8 +76,14 @@ exports.yardUpdate = async (req, res, next) => {
 
 exports.yardDelete = async (req, res, next) => {
   try {
-    await req.yard.destroy();
-    res.status(204).end();
+    if (req.user.role === "admin" || req.user.id === req.yard.userId) {
+      await req.yard.destroy();
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 401;
+      next(err);
+    }
   } catch (error) {
     next(error);
   }
@@ -72,14 +91,20 @@ exports.yardDelete = async (req, res, next) => {
 
 exports.equipmentCreate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.role === req.yard.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      req.body.yardId = req.yard.id;
+      const newEquipment = await Equipment.create(req.body);
+      res.status(201).json(newEquipment);
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 401;
+      next(err);
     }
-    req.body.yardId = req.yard.id;
-    const newEquipment = await Equipment.create(req.body);
-    res.status(201).json(newEquipment);
   } catch (error) {
     next(error);
   }
