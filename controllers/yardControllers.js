@@ -14,18 +14,19 @@ exports.yardCreate = async (req, res, next) => {
   try {
     const foundYard = await Yard.findOne({ where: { userId: req.user.id } });
     if (foundYard) {
+      const err = new Error("You already have Yard");
+      err.status = 403;
+      next(err);
+    } else {
       if (req.file) {
-        const err = new Error("You already have Yard");
-        err.status = 403;
-        next(err);
+        req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
       }
-      req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+      req.body.userId = req.user.id;
+      const newYard = await Yard.create(req.body);
+      res.status(201).json(newYard);
     }
-    req.body.userId = req.user.id;
-    const newYard = await Yard.create(req.body);
-    res.status(201).json(newYard);
   } catch (error) {
     next(error);
   }
@@ -91,7 +92,7 @@ exports.yardDelete = async (req, res, next) => {
 
 exports.equipmentCreate = async (req, res, next) => {
   try {
-    if (req.user.role === req.yard.userId) {
+    if (req.user.id === req.yard.userId) {
       if (req.file) {
         req.body.image = `${req.protocol}://${req.get("host")}/media/${
           req.file.filename
