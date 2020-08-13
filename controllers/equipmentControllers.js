@@ -24,10 +24,12 @@ exports.equipmentList = async (req, res, next) => {
 
 exports.equipmentUpdate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.id === req.yard.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
     }
     await req.equipment.update(req.body);
     res.status(204).end();
@@ -38,8 +40,10 @@ exports.equipmentUpdate = async (req, res, next) => {
 
 exports.equipmentDelete = async (req, res, next) => {
   try {
-    await req.equipment.destroy();
-    res.status(204).end();
+    if (req.user.id === req.yard.userId) {
+      await req.equipment.destroy();
+      res.status(204).end();
+    }
   } catch (error) {
     next(error);
   }
