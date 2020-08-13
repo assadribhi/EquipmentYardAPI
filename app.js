@@ -40,9 +40,10 @@ const run = async () => {
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
+  const PORT = process.env.PORT || 8000;
 
-  await app.listen(8000, () => {
-    console.log("This Works!!!!!");
+  await app.listen(PORT, () => {
+    console.log(`This Works!!!!! on ${PORT}`);
   });
 };
 
