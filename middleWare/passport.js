@@ -1,6 +1,5 @@
 const { User } = require("../db/models");
 const bcrypt = require("bcrypt");
-const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt").ExtractJwt;
