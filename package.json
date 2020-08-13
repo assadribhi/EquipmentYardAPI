@@ -22,6 +22,6 @@
     "slugify": "^1.4.4"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   }
 }
