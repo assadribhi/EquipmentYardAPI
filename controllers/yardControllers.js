@@ -19,9 +19,9 @@ exports.yardCreate = async (req, res, next) => {
       next(err);
     } else {
       if (req.file) {
-        req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
-          req.file.filename
-        }`;
+        req.body.yardImage = `${
+          process.env.PORT ? "https" : "http"
+        }://${req.get("host")}/media/${req.file.filename}`;
       }
       req.body.userId = req.user.id;
       const newYard = await Yard.create(req.body);
@@ -59,9 +59,9 @@ exports.yardUpdate = async (req, res, next) => {
   try {
     if (req.user.role === "admin" || req.user.id === req.yard.userId) {
       if (req.file) {
-        req.body.yardImage = `${req.protocol}://${req.get("host")}/media/${
-          req.file.filename
-        }`;
+        req.body.yardImage = `${
+          process.env.PORT ? "https" : "http"
+        }://${req.get("host")}/media/${req.file.filename}`;
       }
       await req.yard.update(req.body);
       res.status(204).end();
@@ -94,9 +94,9 @@ exports.equipmentCreate = async (req, res, next) => {
   try {
     if (req.user.id === req.yard.userId) {
       if (req.file) {
-        req.body.image = `${req.protocol}://${req.get("host")}/media/${
-          req.file.filename
-        }`;
+        req.body.image = `${process.env.PORT ? "https" : "http"}://${req.get(
+          "host"
+        )}/media/${req.file.filename}`;
       }
       req.body.yardId = req.yard.id;
       const newEquipment = await Equipment.create(req.body);
