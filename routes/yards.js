@@ -9,7 +9,7 @@ const {
   equipmentCreate,
 } = require("../controllers/yardControllers");
 
-const upload = require("../middleware/multer");
+const upload = require("../middleWare/multer");
 const passport = require("passport");
 
 const router = express.Router();

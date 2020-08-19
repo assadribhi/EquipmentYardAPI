@@ -7,7 +7,7 @@ const {
   fetchEquipment,
 } = require("../controllers/equipmentControllers");
 
-const upload = require("../middleware/multer");
+const upload = require("../middleWare/multer");
 
 const router = express.Router();
 

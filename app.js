@@ -3,7 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const db = require("./db");
-const { localStrategy, jwtStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleWare/passport");
 
 const equipmentRoutes = require("./routes/equipment");
 const userRoutes = require("./routes/users");
