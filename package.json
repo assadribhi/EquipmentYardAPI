@@ -21,8 +21,5 @@
     "sequelize": "^6.3.3",
     "sequelize-slugify": "^0.9.1",
     "slugify": "^1.4.4"
-  },
-  "scripts": {
-    "start": "nodemon app.js"
   }
 }
